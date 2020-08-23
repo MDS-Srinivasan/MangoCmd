@@ -1,0 +1,91 @@
+db.products.insert([
+   { "_id" : 1, "sku" : "almonds", description: "product 1", "" : 120 ,"price":32},
+   { "_id" : 2, "sku" : "bread", description: "product 2", "instock" : 80,"price":1000 },
+   { "_id" : 3, "sku" : "cashews", description: "product 3", "instock" : 60 ,"price":100},
+   { "_id" : 4, "sku" : "pecans", description: "product 4", "instock" : 70,"price":1000 },
+   { "_id" : 5, "sku": null, description: "Incomplete" },
+   { "_id" : 6 }
+])
+
+db.orders.insert([
+   { "_id" : 1, "item" : "almonds", "price" : 12, "quantity" : 2 },
+   { "_id" : 2, "item" : "pecans", "price" : 20, "quantity" : 1 },
+   { "_id" : 3  }
+])
+
+db.user.insert([
+{"_id" : 1, last_name: "akash", first_name: "dani","age":21}, 
+{"_id" : 2, last_name: "joshua", first_name: "sam","age":14}, 
+{"_id" : 3, last_name: "kumar", first_name: "ram" ,"age":20}
+])
+
+db.user.aggregate([
+   {
+     $lookup:
+       {
+         from: "orders",
+         localField: "_id",
+         foreignField: "_id",
+         as: "ordered"
+       } 
+  },
+	{ 
+	$unwind: "$ordered" 
+	},
+   {
+     $lookup:
+       {
+         from: "products",
+         localField: "_id",
+         foreignField: "_id",
+         as: "products"
+       } 
+  },
+	{ 
+	$unwind: "$products" 
+	}
+])
+
+
+1.db.user.find({{age:{$gt:18}}).pretty()
+2.db.products.find( { $and: [ { price: { $gt: 500 } }, { instock: { $exists: true } } ] } )
+
+4.
+db.user.aggregate([
+   {
+     $lookup:
+       {
+         from: "orders",
+         localField: "_id",
+         foreignField: "_id",
+         as: "ordered"
+       }
+  }
+])
+
+5.db.user.aggregate([
+   {
+     $lookup:
+       {
+         from: "orders",
+         localField: "_id",
+         foreignField: "_id",
+         as: "ordered"
+       } 
+  },
+	{ 
+	$unwind: "$ordered" 
+	},
+   {
+     $lookup:
+       {
+         from: "products",
+         localField: "_id",
+         foreignField: "_id",
+         as: "products"
+       } 
+  },
+	{ 
+	$unwind: "$products" 
+	}
+])
